@@ -130,7 +130,6 @@ import it.fast4x.rimusic.ui.styling.colorPaletteOf
 import it.fast4x.rimusic.ui.styling.customColorPalette
 import it.fast4x.rimusic.ui.styling.dynamicColorPaletteOf
 import it.fast4x.rimusic.ui.styling.typographyOf
-import it.fast4x.rimusic.utils.InitDownloader
 import it.fast4x.rimusic.utils.LocalMonetCompat
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.forcePlay
@@ -902,8 +901,6 @@ class MainActivity :
 
                     onDispose { player.removeListener(listener) }
                 }
-
-                InitDownloader()
 
             }
 
