@@ -51,8 +51,9 @@ object CacheModule {
             // check location set by user and return
             // appropriate path with [cacheDirName] appended.
             else -> when( Preferences.EXO_CACHE_LOCATION.value ) {
-                ExoPlayerCacheLocation.System  -> context.cacheDir
-                ExoPlayerCacheLocation.Private -> context.filesDir
+                ExoPlayerCacheLocation.System   -> context.cacheDir
+                ExoPlayerCacheLocation.Private  -> context.filesDir
+                ExoPlayerCacheLocation.SPLIT    -> if( cacheDirName == DOWNLOAD_CACHE_DIRNAME ) context.filesDir else context.cacheDir
             }.resolve( cacheDirName )
         }
 
