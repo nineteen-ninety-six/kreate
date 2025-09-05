@@ -38,6 +38,7 @@ object PlayerModule {
     @Provides
     @OptIn(UnstableApi::class)
     @kotlin.OptIn(ExperimentalSerializationApi::class)
+    @Singleton
     fun providesPlayer(
         @ApplicationContext context: Context,
         @Named("cache") cache: Cache,
