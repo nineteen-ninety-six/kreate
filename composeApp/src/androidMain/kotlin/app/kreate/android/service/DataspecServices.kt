@@ -101,9 +101,9 @@ private val jsonParser =
  * New record will be created and insert into database
  *
  */
-private fun upsertSongInfo( videoId: String ) {       // Use this to prevent suspension of thread while waiting for response from YT
+private fun upsertSongInfo( context: Context, videoId: String ) {       // Use this to prevent suspension of thread while waiting for response from YT
     // Skip adding if it's just added in previous call
-    if( videoId == justInserted || !isNetworkAvailable( appContext() ) ) return
+    if( videoId == justInserted || !isNetworkAvailable( context ) ) return
 
     Timber.tag( LOG_TAG ).v( "fetching and upserting $videoId's information to the database" )
 
@@ -434,7 +434,7 @@ fun PlayerServiceModern.createDataSourceFactory( context: Context ): DataSource.
         val isLocal = dataSpec.uri.scheme == ContentResolver.SCHEME_CONTENT || dataSpec.uri.scheme == ContentResolver.SCHEME_FILE
 
         if( !isLocal )
-            upsertSongInfo( videoId )
+            upsertSongInfo( context, videoId )
 
         return@Factory if( isLocal || isCached() || isDownloaded() ){
             Timber.tag( LOG_TAG ).d( "$videoId exists in cache, proceeding to use from cache" )
@@ -485,7 +485,7 @@ fun PlayerModule.createDataSourceFactory(
     val isLocal = dataSpec.uri.scheme == ContentResolver.SCHEME_CONTENT || dataSpec.uri.scheme == ContentResolver.SCHEME_FILE
 
     if( !isLocal )
-        upsertSongInfo( videoId )
+        upsertSongInfo( context, videoId )
 
     return@Factory if( isLocal || isCached() || isDownloaded() ){
         Timber.tag( LOG_TAG ).d( "$videoId exists in cache, proceeding to use from cache" )
@@ -511,7 +511,7 @@ fun DownloadHelperImpl.createDataSourceFactory( context: Context ): DataSource.F
         val videoId: String = dataSpec.uri
                                       .toString()
                                       .substringAfter( "watch?v=" )
-                                      .also( ::upsertSongInfo )
+                                      .also { upsertSongInfo( context, it ) }
 
         val isDownloaded = downloadCache.isCached( videoId, dataSpec.position, CHUNK_LENGTH )
 
